@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="JDAS Bank, serviços de conta bancária." />
+    <title>JRBank</title>
+
+    <!-- Tailwind CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <!-- Link para ícones -->
+    <script src="https://unpkg.com/heroicons@1.0.6/dist/solid.min.js"></script>
+    <!-- SweetAlert2 CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
+    />
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+      .screen {
+        background-image: url("./image/banco2.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        position: relative;
+      }
+
+      /* Overlay com opacidade para escurecer o fundo */
+      .overlay-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6); /* Fundo escuro com opacidade */
+        z-index: 1;
+      }
+
+      .content {
+        position: relative;
+        z-index: 2; /* Conteúdo acima do overlay */
+        text-align: center; /* Garantindo que o conteúdo seja centralizado */
+      }
+
+      .fade-in {
+        opacity: 0;
+        animation: fadeIn 1s forwards;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+
+      .hover-transition {
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+
+      .hover-transition:hover {
+        transform: scale(1.05);
+      }
+
+      .title-color {
+        color: #8a51fc;
+      }
+
+      .modal-active .overlay {
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-100">
+    <!-- Tela de Boas-Vindas -->
+    <div
+      id="welcomeScreen"
+      class="screen h-screen flex flex-col justify-center items-center bg-gradient-to-b from-purple-600 to-gray-100 text-white fade-in"
+    >
+      <div class="overlay-bg"></div>
+      <!-- Adicionando overlay transparente -->
+      <div class="content">
+        <!-- Corrigido para garantir a centralização -->
+        <h1 class="text-4xl font-extrabold mb-4 text-purple-500 text-center">
+          Sistema JRBank
+        </h1>
+        <button
+          onclick="navigateToMenu()"
+          class="bg-white text-purple-600 font-bold py-3 px-8 rounded-lg hover:bg-gray-100 hover-transition"
+        >
+          Acessar Menu
+        </button>
+      </div>
+    </div>
+
+    <!-- Menu Principal -->
+    <div
+      id="menuScreen"
+      class="screen hidden h-screen flex flex-col justify-center items-center px-4"
+    >
+      <div class="overlay-bg"></div>
+      <!-- Adicionando overlay transparente -->
+      <div class="content">
+        <!-- Colocando o conteúdo aqui -->
+        <h2 class="text-4xl font-extrabold mb-4 text-purple-500 text-center">
+          Sistema JRBank
+        </h2>
+
+        <!-- Ajuste para Grid Layout -->
+        <div class="grid grid-cols-3 gap-4 max-w-md w-full">
+          <!-- Botão para Cadastrar Cliente -->
+          <button
+            onclick="navigateTo('cadastroCliente')"
+            class="flex items-center bg-purple-500 text-white font-bold py-3 px-3 sm:px-5 rounded-lg hover:bg-purple-700 hover-transition shadow-md"
+          >
+            <svg
+              class="w-8 h-8 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 4v16m8-8H4"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            Cadastrar
+          </button>
+
+          <!-- Botão para Abrir Conta -->
+          <button
+            onclick="navigateTo('abrirConta')"
+            class="flex items-center bg-purple-500 text-white font-bold py-3 px-3 sm:px-5 rounded-lg hover:bg-purple-700 hover-transition shadow-md"
+          >
+            Criar Conta
+          </button>
+
+          <!-- Botão para Realizar Depósito -->
+          <button
+            onclick="navigateTo('realizarDeposito')"
+            class="flex items-center bg-purple-500 text-white font-bold py-3 px-3 sm:px-5 rounded-lg hover:bg-purple-700 hover-transition shadow-md"
+          >
+            Depósito
+          </button>
+
+          <!-- Botão para Realizar Saque -->
+          <button
+            onclick="navigateTo('realizarSaque')"
+            class="flex items-center bg-purple-500 text-white font-bold py-3 px-3 sm:px-5 rounded-lg hover:bg-purple-700 hover-transition shadow-md"
+          >
+            <svg
+              class="w-8 h-8 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M4 12h16m0 0l-4 4m4-4l-4-4"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            Saque
+          </button>
+
+          <!-- Botão para Ver Extrato -->
+          <button
+            onclick="navigateTo('extrato')"
+            class="flex items-center bg-purple-500 text-white font-bold py-3 px-3 sm:px-5 rounded-lg hover:bg-purple-700 hover-transition shadow-md"
+          >
+            <svg
+              class="w-8 h-8 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M13 16h-1v-4H8l4-4 4 4h-3v4zM3 20h18"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            Extrato
+          </button>
+
+          <!-- Botão para Realizar PIX -->
+          <button
+            onclick="navigateTo('realizarPix')"
+            class="flex items-center bg-purple-500 text-white font-bold py-3 px-3 sm:px-5 rounded-lg hover:bg-purple-700 hover-transition shadow-md"
+          >
+            <svg
+              class="w-8 h-8 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 4v16m8-8H4"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            PIX
+          </button>
+
+          <!-- Botão Sair no Menu Principal -->
+          <button
+            onclick="navigateTo('welcomeScreen')"
+            class="flex items-center bg-purple-500 text-white font-bold py-3 px-3 sm:px-5 rounded-lg hover:bg-red-700 hover-transition shadow-md"
+          >
+            <svg
+              class="w-8 h-8 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M6 18L18 6M6 6l12 12"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            Sair
+          </button>
+
+          <!-- Botão para Encerrar Conta -->
+          <button
+            onclick="navigateTo('encerrarConta')"
+            class="flex items-center bg-red-600 text-white font-bold py-3 px-3 sm:px-5 rounded-lg hover:bg-red-700 hover-transition shadow-md"
+          >
+            <svg
+              class="w-8 h-8 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M6 18L18 6M6 6l12 12"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            Encerrar Conta
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tela de Cadastro de Cliente -->
+    <div
+      id="cadastroCliente"
+      class="screen hidden h-screen flex flex-col justify-center items-center"
+    >
+      <div class="overlay-bg"></div>
+      <!-- Overlay para opacidade -->
+      <div class="content">
+        <h2 class="text-3xl font-extrabold mb-4 text-purple-600">
+          Cadastrar Cliente
+        </h2>
+        <form
+          id="cadastroClienteForm"
+          class="px-10 pt-8 pb-10 w-full max-w-md"
+          onsubmit="cadastrarCliente(event)"
+        >
+          <div class="mb-6">
+            <input
+              id="nome"
+              type="text"
+              class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="Digite seu nome"
+            />
+          </div>
+          <div class="mb-6">
+            <input
+              id="cpf"
+              type="text"
+              class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="Digite seu CPF"
+            />
+          </div>
+          <div class="mb-6">
+            <input
+              id="endereco"
+              type="text"
+              class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="Digite seu endereço"
+            />
+          </div>
+          <button
+            class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg w-full hover-transition"
+            type="submit"
+          >
+            Cadastrar
+          </button>
+        </form>
+        <button
+          onclick="navigateTo('menuScreen')"
+          class="mt-4 bg-gray-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-600 hover-transition"
+        >
+          Voltar ao Menu
+        </button>
+      </div>
+    </div>
+
+    <!-- Tela de Abrir Conta -->
+    <div
+      id="abrirConta"
+      class="screen hidden h-screen flex flex-col justify-center items-center"
+    >
+      <div class="overlay-bg"></div>
+      <!-- Overlay para opacidade -->
+      <div class="content">
+        <h2 class="text-4xl font-extrabold mb-2 title-color">Criar Conta</h2>
+        <form
+          id="abrirContaForm"
+          class="px-10 pt-8 pb-10 w-full max-w-md"
+          onsubmit="abrirConta(event)"
+        >
+          <div class="mb-6">
+            <label
+              for="cpfConta"
+              class="block text-purple-600 font-extrabold mb-2"
+            ></label>
+            <input
+              id="cpfConta"
+              type="text"
+              class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="Digite o CPF do cliente"
+            />
+          </div>
+          <button
+            class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg w-full hover-transition"
+            type="submit"
+          >
+            Abrir Conta
+          </button>
+        </form>
+        <button
+          onclick="navigateTo('menuScreen')"
+          class="mt-4 bg-gray-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-600 hover-transition"
+        >
+          Voltar ao Menu
+        </button>
+      </div>
+    </div>
+
+    <!-- Tela de Realizar Depósito -->
+    <div
+      id="realizarDeposito"
+      class="screen hidden h-screen flex flex-col justify-center items-center"
+    >
+      <div class="overlay-bg"></div>
+      <!-- Overlay para opacidade -->
+      <div class="content">
+        <h2 class="text-4xl font-extrabold mb-4 title-color">
+          Realizar Depósito
+        </h2>
+        <form
+          id="depositoForm"
+          class="px-10 pt-8 pb-10 w-full max-w-md"
+          onsubmit="realizarDeposito(event)"
+        >
+          <div class="mb-6">
+            <input
+              id="cpfDeposito"
+              type="text"
+              class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="Digite o CPF do cliente"
+            />
+          </div>
+          <div class="mb-6">
+            <input
+              id="valorDeposito"
+              type="text"
+              class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="Digite o valor"
+            />
+          </div>
+          <button
+            class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg w-full hover-transition"
+            type="submit"
+          >
+            Depositar
+          </button>
+        </form>
+        <button
+          onclick="navigateTo('menuScreen')"
+          class="mt-4 bg-gray-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-600 hover-transition"
+        >
+          Voltar ao Menu
+        </button>
+      </div>
+    </div>
+
+    <!-- Tela de Realizar Saque -->
+    <div
+      id="realizarSaque"
+      class="screen hidden h-screen flex flex-col justify-center items-center"
+    >
+      <div class="overlay-bg"></div>
+      <!-- Overlay para opacidade -->
+      <div class="content">
+        <h2 class="text-4xl font-extrabold mb-4 title-color">Realizar Saque</h2>
+        <form
+          id="saqueForm"
+          class="px-10 pt-8 pb-10 w-full max-w-md"
+          onsubmit="realizarSaque(event)"
+        >
+          <div class="mb-6">
+            <input
+              id="cpfSaque"
+              type="text"
+              class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="Digite o CPF do cliente"
+            />
+          </div>
+          <div class="mb-6">
+            <input
+              id="valorSaque"
+              type="text"
+              class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="Digite o valor"
+            />
+          </div>
+          <button
+            class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg w-full hover-transition"
+            type="submit"
+          >
+            Sacar
+          </button>
+        </form>
+        <button
+          onclick="navigateTo('menuScreen')"
+          class="mt-4 bg-gray-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-600 hover-transition"
+        >
+          Voltar ao Menu
+        </button>
+      </div>
+    </div>
+
+    <!-- Tela de Ver Extrato -->
+    <div
+      id="extrato"
+      class="screen hidden h-screen flex flex-col justify-center items-center"
+    >
+      <div class="overlay-bg"></div>
+      <!-- Overlay para opacidade -->
+      <div class="content">
+        <h2 class="text-4xl font-extrabold mb-4 title-color">
+          Extrato Detalhado
+        </h2>
+        <form
+          id="extratoForm"
+          class="px-10 pt-8 pb-10 w-full max-w-md"
+          onsubmit="verExtrato(event)"
+        >
+          <div class="mb-6">
+            <input
+              id="cpfExtrato"
+              type="text"
+              class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="Digite o CPF do cliente"
+            />
+          </div>
+          <button
+            class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg w-full hover-transition"
+            type="submit"
+          >
+            Ver Extrato
+          </button>
+        </form>
+        <button
+          onclick="navigateTo('menuScreen')"
+          class="mt-4 bg-gray-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-600 hover-transition"
+        >
+          Voltar ao Menu
+        </button>
+      </div>
+    </div>
+
+    <!-- Tela de Realizar PIX -->
+<div
+id="realizarPix"
+class="screen hidden h-screen flex flex-col justify-center items-center"
+>
+<div class="overlay-bg"></div> <!-- Overlay para opacidade -->
+<div class="content">
+  <h2 class="text-4xl font-extrabold mb-4 title-color">Realizar PIX</h2>
+  <form
+    id="pixForm"
+    class="px-10 pt-8 pb-10 w-full max-w-md"
+    onsubmit="realizarPix(event)"
+  >
+    <!-- CPF do Remetente -->
+    <div class="mb-6">
+      
+      <input
+        id="cpfRemetente"
+        type="text"
+        class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+        placeholder="Digite o CPF do remetente"
+        required
+      />
+    </div>
+
+    <!-- Chave PIX do Destinatário -->
+    <div class="mb-6">
+      
+      <input
+        id="chavePix"
+        type="text"
+        class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+        placeholder="Digite a chave PIX"
+        required
+      />
+    </div>
+
+    <!-- Valor do PIX -->
+    <div class="mb-6">
+      
+      <input
+        id="valorPix"
+        type="text"
+        class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+        placeholder="Digite o valor"
+        required
+      />
+    </div>
+
+    <button
+      class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg w-full hover-transition"
+      type="submit"
+    >
+      Fazer PIX
+    </button>
+  </form>
+
+  <!-- Botão Voltar ao Menu -->
+  <button
+    onclick="navigateTo('menuScreen')"
+    class="mt-4 bg-gray-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-600 hover-transition"
+  >
+    Voltar ao Menu
+  </button>
+</div>
+</div>
+
+    <div
+      id="encerrarConta"
+      class="screen hidden h-screen flex flex-col justify-center items-center"
+    >
+      <div class="overlay-bg"></div>
+      <!-- Overlay para opacidade -->
+      <div class="content">
+        <h2 class="text-4xl font-extrabold mb-4 title-color">Encerrar Conta</h2>
+        <form
+          id="encerrarContaForm"
+          class="px-10 pt-8 pb-10 w-full max-w-md"
+          onsubmit="encerrarConta(event)"
+        >
+          <div class="mb-6">
+            <input
+              id="cpfEncerrar"
+              type="text"
+              class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="Digite o CPF do cliente"
+            />
+          </div>
+          <button
+            class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg w-full hover-transition"
+            type="submit"
+          >
+            Encerrar Conta
+          </button>
+        </form>
+        <button
+          onclick="navigateTo('menuScreen')"
+          class="mt-4 bg-gray-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-600 hover-transition"
+        >
+          Voltar ao Menu
+        </button>
+      </div>
+    </div>
+    <script src="./script.js"></script>
+  </body>
+</html>
+
